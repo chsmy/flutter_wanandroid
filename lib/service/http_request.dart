@@ -1,7 +1,13 @@
 import "package:dio/dio.dart";
 import 'dart:async';
 import 'dart:io';
-import '../config/service_url.dart';
+
+const BaseUrl = 'https://www.wanandroid.com/';
+
+const UrlPath = {
+  'homeList' : BaseUrl + 'article/list',
+  'homeBanner' : BaseUrl + 'banner/json',
+};
 
 Future requestGet(url,{formData})async{
   try{
@@ -9,9 +15,9 @@ Future requestGet(url,{formData})async{
     Response response;
     Dio dio = new Dio();
     if(formData==null){
-      response = await dio.get(UrlPath[url]);
+      response = await dio.get(url);
     }else{
-      response = await dio.get(UrlPath[url],queryParameters: formData);
+      response = await dio.get(url,queryParameters: formData);
     }
     print(UrlPath[url]);
     if(response.statusCode==200){
@@ -29,9 +35,9 @@ Future requestPost(url,{formData})async{
     Response response;
     Dio dio = new Dio();
     if(formData==null){
-      response = await dio.post(UrlPath[url]);
+      response = await dio.post(url);
     }else{
-      response = await dio.post(UrlPath[url],data:formData);
+      response = await dio.post(url,data:formData);
     }
     print(response);
     if(response.statusCode==200){
@@ -41,5 +47,19 @@ Future requestPost(url,{formData})async{
     }
   }catch(e){
     return print('ERROR:======>${e}');
+  }
+}
+
+class HttpTool{
+  // 拼接url
+  static String getPath({String path: '', int page, String resType: 'json'}) {
+    StringBuffer sb = new StringBuffer(path);
+    if (page != null) {
+      sb.write('/$page');
+    }
+    if (resType != null && resType.isNotEmpty) {
+      sb.write('/$resType');
+    }
+    return sb.toString();
   }
 }

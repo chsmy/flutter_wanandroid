@@ -11,15 +11,18 @@ class SwiperDiy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blue,
-      height: ScreenUtil().setHeight(600),
-      child: Swiper(
-        itemBuilder: (context,index){
-          return Image.network(swiperDataList[index]['imagePath']);
-        },
-        itemCount: swiperDataList.length,
-        pagination: SwiperPagination(),
-        autoplay: true,
+      width: ScreenUtil().setWidth(1080),
+      color: Colors.white,
+      child: AspectRatio(
+        aspectRatio: 16/9,
+        child: Swiper(
+          itemBuilder: (context,index){
+            return Image.network(swiperDataList[index]['imagePath'],fit: BoxFit.fill,);
+          },
+          itemCount: swiperDataList.length,
+          pagination: SwiperPagination(),
+          autoplay: true,
+        ),
       ),
     );
   }

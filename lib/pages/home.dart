@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_wanandroid/widget/swiper_diy.dart';
 import '../service/http_request.dart';
@@ -11,15 +13,19 @@ class HomePage extends StatefulWidget {
 }
 //AutomaticKeepAliveClientMixin可以保存页面的状态，防止点击tab切换页面的时候从新加载
 class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
-
+  
+  Future _bannerFuture;
   int page = 1;
   List homeList=[];
-
+  bool isRefresh = false;
+  EasyRefreshController _controller;
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
+    _controller = EasyRefreshController();
+    _bannerFuture = _getBannerList();
    _getHomeList();
     super.initState();
   }
@@ -27,23 +33,33 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('home'),),
+      appBar: AppBar(title: Text('玩安卓'),),
       //FutureBuilder可以异步更新界面
       body: FutureBuilder(
-        future: requestGet('homeBanner'),
+        //future一定要放到build外部去初始化，否则每次刷新都会请求网络
+        future: _bannerFuture,
         builder: (context,snapshot){
           if(snapshot.hasData){
             var data = json.decode(snapshot.data.toString());
             return  EasyRefresh(
+              controller: _controller,
+              enableControlFinishRefresh: true,
+              enableControlFinishLoad: true,
               child: ListView(
+                padding: EdgeInsets.all(0.0),
                 children: <Widget>[
                   SwiperDiy(swiperDataList: data['data'],),
                   HomeList(homeList: homeList),
                 ],
               ),
               onRefresh: () async{
+                isRefresh = true;
+                page = 1;
+                _getHomeList();
               },
               onLoad: () async {
+                isRefresh = false;
+                _getHomeList();
               },
             );
           }else{
@@ -55,13 +71,25 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
       ),
     );
   }
+
+  Future _getBannerList(){
+    return requestGet(UrlPath['homeBanner']);
+  }
+
   void _getHomeList(){
-    requestGet('homeList').then((val){
+    var urlPath = HttpTool.getPath(path: UrlPath['homeList'],page: page);
+    requestGet(urlPath).then((val){
       var data=json.decode(val.toString());
       setState(() {
+        if(isRefresh){
+          homeList.clear();
+        }else{
+          page++;
+        }
         homeList.addAll(data['data']['datas']);
-        page++;
       });
+      _controller.finishRefresh(success: true);
+      _controller.finishLoad();
     });
   }
 }
@@ -84,21 +112,38 @@ class HomeList extends StatelessWidget {
 
   Widget _listItemBuilder(BuildContext context, int index) {
     return Container(
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text(homeList[index]['shareUser']),
-              Text(homeList[index]['niceShareDate']),
-            ],
+      padding: EdgeInsets.only(left: 5,right: 5),
+      child: InkWell(
+        onTap: (){
+           print('点击了${index}');
+        },
+        child:  Card(
+          child: Container(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(homeList[index]['chapterName']),
+                    Text(homeList[index]['niceShareDate']),
+                  ],
+                ),
+                SizedBox(height: 5,),
+                Text(homeList[index]['title'],maxLines: 1,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 18.0),),
+                SizedBox(height: 5,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(homeList[index]['superChapterName']),
+                    Icon(Icons.favorite_border,size: 16,)
+                  ],
+                ),
+              ],
+            ),
           ),
-          Text(homeList[index]['title']),
-          Row(
-            children: <Widget>[
-              Text(homeList[index]['superChapterName']),
-            ],
-          )
-        ],
+        ),
       ),
     );
   }
