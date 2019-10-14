@@ -14,7 +14,7 @@ class SwiperDiy extends StatelessWidget {
       width: ScreenUtil().setWidth(1080),
       color: Colors.white,
       child: AspectRatio(
-        aspectRatio: 16/9,
+        aspectRatio: 2/1,
         child: Swiper(
           itemBuilder: (context,index){
             return Image.network(swiperDataList[index]['imagePath'],fit: BoxFit.fill,);
