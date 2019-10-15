@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home.dart';
-import 'mine.dart';
+import 'bjnews.dart';
 import 'navigation.dart';
 import 'project.dart';
 import 'system.dart';
@@ -23,21 +23,21 @@ class _IndexPageState extends State<IndexPage> {
         title: Text('体系')
     ),
     BottomNavigationBarItem(
+        icon: Icon(Icons.camera),
+        title: Text('公众号')
+    ),
+    BottomNavigationBarItem(
         icon: Icon(Icons.navigation),
         title: Text('导航')
     ),
     BottomNavigationBarItem(
-        icon: Icon(Icons.favorite),
+        icon: Icon(Icons.dashboard),
         title: Text('项目')
-    ),
-    BottomNavigationBarItem(
-        icon: Icon(Icons.person),
-        title: Text('我的')
     ),
   ];
 
   final List<Widget> pages = [
-    HomePage(),SystemPage(),NavigationPage(),ProjectPage(),MinePage()
+    HomePage(),SystemPage(),BjnewsPage(),NavigationPage(),ProjectPage()
   ];
 
   int currentIndex = 0;

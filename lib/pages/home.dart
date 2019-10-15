@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_wanandroid/common/webview.dart';
+import 'package:flutter_wanandroid/pages/mine.dart';
 import 'package:flutter_wanandroid/widget/swiper_diy.dart';
 import '../service/http_request.dart';
 import 'dart:convert';
@@ -33,7 +35,8 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('玩安卓'),),
+      appBar: AppBar(title: Text('玩安卓'),elevation: 0.0,centerTitle: true,),
+      drawer: MinePage(),
       //FutureBuilder可以异步更新界面
       body: FutureBuilder(
         //future一定要放到build外部去初始化，否则每次刷新都会请求网络
@@ -113,13 +116,19 @@ class HomeList extends StatelessWidget {
   Widget _listItemBuilder(BuildContext context, int index) {
     return Container(
       padding: EdgeInsets.only(left: 5,right: 5),
-      child: InkWell(
-        onTap: (){
-           print('点击了${index}');
-        },
-        child:  Card(
-          child: Container(
-            padding: EdgeInsets.all(10),
+      child: Card(
+        elevation: 2.0,
+        child: Container(
+          padding: EdgeInsets.all(10),
+          child: InkWell(
+            splashColor: Colors.grey[400],
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context)=>Browser(
+                    url: homeList[index]['link'],
+                    title: homeList[index]['title'],)
+              ));
+            },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

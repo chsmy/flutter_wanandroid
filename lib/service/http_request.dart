@@ -5,8 +5,9 @@ import 'dart:io';
 const BaseUrl = 'https://www.wanandroid.com/';
 
 const UrlPath = {
-  'homeList' : BaseUrl + 'article/list',
-  'homeBanner' : BaseUrl + 'banner/json',
+  'homeList' : BaseUrl + 'article/list',//首页列表
+  'homeBanner' : BaseUrl + 'banner/json',//轮播图
+  'system' : BaseUrl + 'tree/json',//体系
 };
 
 Future requestGet(url,{formData})async{
@@ -19,7 +20,7 @@ Future requestGet(url,{formData})async{
     }else{
       response = await dio.get(url,queryParameters: formData);
     }
-    print(UrlPath[url]);
+    print('url：${url}');
     if(response.statusCode==200){
       return response;
     }else{
