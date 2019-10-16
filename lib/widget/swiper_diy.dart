@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_wanandroid/common/webview.dart';
+import 'package:flutter_wanandroid/common/webview_plugin.dart';
 
 //自定义首页轮播图
 class SwiperDiy extends StatelessWidget {
@@ -21,7 +22,7 @@ class SwiperDiy extends StatelessWidget {
             return InkWell(
               onTap: (){
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context)=>Browser(
+                    builder: (context)=>WebViewPage(
                       url: swiperDataList[index]['url'],
                       title: swiperDataList[index]['title'],)
                 ));

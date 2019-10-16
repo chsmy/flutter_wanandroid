@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_wanandroid/common/webview.dart';
+import 'package:flutter_wanandroid/common/webview_plugin.dart';
 import 'package:flutter_wanandroid/pages/mine.dart';
 import 'package:flutter_wanandroid/widget/swiper_diy.dart';
 import '../service/http_request.dart';
@@ -124,7 +125,7 @@ class HomeList extends StatelessWidget {
             splashColor: Colors.grey[400],
             onTap: (){
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context)=>Browser(
+                  builder: (context)=>WebViewPage(
                     url: homeList[index]['link'],
                     title: homeList[index]['title'],)
               ));

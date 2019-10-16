@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home.dart';
-import 'bjnews.dart';
+import 'wxnews.dart';
 import 'navigation.dart';
 import 'project.dart';
 import 'system.dart';
@@ -37,7 +37,7 @@ class _IndexPageState extends State<IndexPage> {
   ];
 
   final List<Widget> pages = [
-    HomePage(),SystemPage(),BjnewsPage(),NavigationPage(),ProjectPage()
+    HomePage(),SystemPage(),WxNewsPage(),NavigationPage(),ProjectPage()
   ];
 
   int currentIndex = 0;

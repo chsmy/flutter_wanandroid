@@ -8,6 +8,9 @@ const UrlPath = {
   'homeList' : BaseUrl + 'article/list',//首页列表
   'homeBanner' : BaseUrl + 'banner/json',//轮播图
   'system' : BaseUrl + 'tree/json',//体系
+  'wxarticle' : BaseUrl + 'wxarticle/chapters/json',//公众号tab
+  'wxarticle_list' : BaseUrl + 'wxarticle/list',//公众号列表
+  'project' : BaseUrl + 'project/tree/json',//公众号列表
 };
 
 Future requestGet(url,{formData})async{
