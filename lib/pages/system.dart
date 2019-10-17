@@ -1,7 +1,13 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_wanandroid/pages/project.dart';
+import 'package:flutter_wanandroid/pages/wxnews_detail.dart';
 import 'package:flutter_wanandroid/service/http_request.dart';
+
+import 'article_list_wrap.dart';
+import 'mine.dart';
 
 //体系页面
 
@@ -26,6 +32,7 @@ class _SystemPageState extends State<SystemPage> {
         title: Text('体系'),
         centerTitle: true,
       ),
+      drawer: MinePage(),
       body: Container(
         child: SystemList(
           systemList: systemList,
@@ -90,9 +97,11 @@ class TagList extends StatelessWidget {
           spacing: 10.0,
           children: list.map((item){
             return ActionChip(
-              label:Text(item['name']),
+              label:Text(item['name'],style: TextStyle(color: tagColors[Random().nextInt(tagColors.length)]),),
               onPressed: (){
-
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context)=>ArticleListWrap(id: item['id'],title: item['name'],)
+                ));
               },
             );
           }).toList(),

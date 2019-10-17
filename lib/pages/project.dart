@@ -1,8 +1,13 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_wanandroid/service/http_request.dart';
 
+import 'mine.dart';
+
+List tagColors = [Colors.blue,Colors.pink,Colors.pink[200], Colors.grey,Colors.brown,Colors.cyan,Colors.red[300],
+  Colors.purpleAccent,Colors.cyanAccent[700],Colors.red[700]];
 //项目页面
 
 class ProjectPage extends StatefulWidget {
@@ -28,6 +33,7 @@ class _ProjectPageState extends State<ProjectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('项目'),centerTitle: true,),
+      drawer: MinePage(),
       body: FutureBuilder(
         future: _future,
         builder: (context,snapshot){
@@ -68,8 +74,9 @@ class ProjectGridViewBuilder extends StatelessWidget {
   Widget _buildItem(BuildContext context, int index) {
     return Container(
       child: Card(
+        color: tagColors[Random().nextInt(tagColors.length)],
         child: Center(
-          child: Text(datas[index]['name']),
+          child: Text(datas[index]['name'],style: TextStyle(fontSize: 16),),
         ),
       ),
     );

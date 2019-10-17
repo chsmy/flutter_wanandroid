@@ -37,6 +37,7 @@ class _WxNewsPageState extends State<WxNewsPage> {
                   centerTitle: true,
                   bottom: _getItemTabs(items)
               ),
+              drawer: MinePage(),
               body: TabBarView(
                 children: _getItemPages(items),
               ),
@@ -65,7 +66,7 @@ class _WxNewsPageState extends State<WxNewsPage> {
   //每个tab页面
   List<Widget> _getItemPages(List items){
     return items.map((item){
-        return WxNewsDetail(item['id']);
+        return WxNewsDetail(pageId: item['id'],);
     }).toList();
   }
 }

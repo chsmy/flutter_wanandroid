@@ -5,11 +5,11 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_wanandroid/service/http_request.dart';
 
 import 'article_list.dart';
-
+//通过id查找文章列表
 class WxNewsDetail extends StatefulWidget {
-  final pageId;
+  final int pageId;
 
-  WxNewsDetail(this.pageId);
+  WxNewsDetail({this.pageId});
 
   @override
   _WxNewsDetailState createState() => _WxNewsDetailState(pageId);
@@ -18,7 +18,8 @@ class WxNewsDetail extends StatefulWidget {
 class _WxNewsDetailState extends State<WxNewsDetail> {
   final int pageId;
 
-  _WxNewsDetailState(this.pageId) : super();
+  _WxNewsDetailState(this.pageId);
+
   List datas = [];
   bool isRefresh = false;
   int page = 1;
@@ -32,9 +33,9 @@ class _WxNewsDetailState extends State<WxNewsDetail> {
   }
 
   void _getListData() {
-    var urlPath = HttpTool.getPath(
+      var urlPath = HttpTool.getPath(
         path: UrlPath['wxarticle_list'] + '/${pageId}', page: page);
-    requestGet(urlPath).then((val) {
+      requestGet(urlPath).then((val) {
       var data = json.decode(val.toString());
       setState(() {
         if (isRefresh) {
