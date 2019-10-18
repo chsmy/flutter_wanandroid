@@ -6,9 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_wanandroid/common/webview_plugin.dart';
 import 'package:flutter_wanandroid/module/classify.dart';
 import 'package:flutter_wanandroid/pages/project.dart';
+import 'package:flutter_wanandroid/provider/classify_provider.dart';
 import 'package:flutter_wanandroid/service/http_request.dart';
+import 'package:provider/provider.dart';
 
-import 'article_list_wrap.dart';
 import 'mine.dart';
 
 //导航页面
@@ -46,14 +47,16 @@ class _NavigationPageState extends State<NavigationPage> {
               var data = json.decode(snapshot.data.toString());
               ClassifyBean classifyBean = ClassifyBean.fromJson(data);
               classifyBean.data[0].isClicked = true;
+              Future.delayed(Duration(milliseconds: 200)).then((val){
+                //这里直接使用会报一个警告 所以延时设置
+                Provider.of<CategoryNavListProvide>(context,listen: false).getNavList(classifyBean.data[0].articles);
+              });
               return Row(
                 children: <Widget>[
                   LeftNav(
                     list: classifyBean.data,
                   ),
-                  RightContent(
-                    list: classifyBean.data[0].articles,
-                  )
+                  RightContent()
                 ],
               );
             } else {
@@ -105,9 +108,10 @@ class _LeftNavState extends State<LeftNav> {
             }
           }
         });
+        Provider.of<CategoryNavListProvide>(context,listen: false).getNavList(list[index].articles);
       },
       child: Container(
-        color: list[index].isClicked ? Colors.white : Colors.grey,
+        color: list[index].isClicked ? Colors.white : Colors.grey[300],
         padding: EdgeInsets.all(10.0),
         child: Text(list[index].name),
       ),
@@ -116,31 +120,31 @@ class _LeftNavState extends State<LeftNav> {
 }
 
 class RightContent extends StatelessWidget {
-  final List<Article> list;
-
-  RightContent({this.list});
-
   @override
   Widget build(BuildContext context) {
+    final navList = Provider.of<CategoryNavListProvide>(context);
     return Container(
       padding: EdgeInsets.only(left: ScreenUtil().setWidth(40)),
       width: ScreenUtil().setWidth(800),
+      height: ScreenUtil().setWidth(1920),
       color: Colors.white,
       child: SingleChildScrollView(
-        child: Wrap(
-          spacing: 10.0,
-          children: list.map((item) {
-            return ActionChip(
-              label: Text(item.title,style: TextStyle(color: tagColors[Random().nextInt(tagColors.length)]),),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context)=>WebViewPage(
-                      url: item.link,
-                      title: item.title,)
-                ));
-              },
-            );
-          }).toList(),
+        child: Container(
+          child: Wrap(
+            spacing: 10.0,
+            children: navList.navList.map((item) {
+              return ActionChip(
+                label: Text(item.title,style: TextStyle(color: tagColors[Random().nextInt(tagColors.length)]),),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context)=>WebViewPage(
+                        url: item.link,
+                        title: item.title,)
+                  ));
+                },
+              );
+            }).toList(),
+          ),
         ),
       ),
     );

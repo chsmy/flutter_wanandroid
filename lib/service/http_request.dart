@@ -10,8 +10,9 @@ const UrlPath = {
   'system' : BaseUrl + 'tree/json',//体系
   'wxarticle' : BaseUrl + 'wxarticle/chapters/json',//公众号tab
   'wxarticle_list' : BaseUrl + 'wxarticle/list',//公众号列表
-  'project' : BaseUrl + 'project/tree/json',//公众号列表
-  'navi' : BaseUrl + 'navi/json',//公众号列表
+  'project' : BaseUrl + 'project/tree/json',//项目列表
+  'project_detail' : BaseUrl + 'project/list',//项目详情列表
+  'navi' : BaseUrl + 'navi/json',//导航列表
 };
 
 Future requestGet(url,{formData})async{
