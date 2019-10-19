@@ -82,7 +82,7 @@ class LeftNav extends StatefulWidget {
 
 class _LeftNavState extends State<LeftNav> {
   final List<Data> list;
-
+  int currentIndex = 0;
   _LeftNavState({this.list});
 
   @override
@@ -100,18 +100,19 @@ class _LeftNavState extends State<LeftNav> {
     return InkWell(
       onTap: () {
         setState(() {
-          for (int i = 0; i < list.length; i++) {
-            if (i == index) {
-              list[i].isClicked = true;
-            } else {
-              list[i].isClicked = false;
-            }
-          }
+          currentIndex = index;
+//          for (int i = 0; i < list.length; i++) {
+//            if (i == index) {
+//              list[i].isClicked = true;
+//            } else {
+//              list[i].isClicked = false;
+//            }
+//          }
         });
         Provider.of<CategoryNavListProvide>(context,listen: false).getNavList(list[index].articles);
       },
       child: Container(
-        color: list[index].isClicked ? Colors.white : Colors.grey[300],
+        color: index==currentIndex ? Colors.white : Colors.grey[300],
         padding: EdgeInsets.all(10.0),
         child: Text(list[index].name),
       ),
