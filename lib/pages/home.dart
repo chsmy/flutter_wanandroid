@@ -3,11 +3,16 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_wanandroid/common/webview.dart';
 import 'package:flutter_wanandroid/common/webview_plugin.dart';
+import 'package:flutter_wanandroid/pages/login.dart';
 import 'package:flutter_wanandroid/pages/mine.dart';
+import 'package:flutter_wanandroid/provider/login_provider.dart';
 import 'package:flutter_wanandroid/widget/swiper_diy.dart';
+import 'package:provider/provider.dart';
 import '../service/http_request.dart';
 import 'dart:convert';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 //首页
 class HomePage extends StatefulWidget {
@@ -147,7 +152,17 @@ class HomeList extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(homeList[index]['superChapterName']),
-                    Icon(Icons.favorite_border,size: 16,)
+                    InkWell(
+                      onTap: (){
+                        if(!Provider.of<LoginProvider>(context,listen: false).isAlreadyLogin){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            return LoginPage();
+                          }));
+                        }else{
+
+                        }
+                      },
+                      child: Icon(Icons.favorite_border,size: 16,),)
                   ],
                 ),
               ],
