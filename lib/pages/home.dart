@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_wanandroid/common/webview.dart';
+//import 'package:flutter_wanandroid/common/webview.dart';
 import 'package:flutter_wanandroid/common/webview_plugin.dart';
 import 'package:flutter_wanandroid/pages/login.dart';
 import 'package:flutter_wanandroid/pages/mine.dart';
