@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_wanandroid/common/webview.dart';
 import 'package:flutter_wanandroid/common/webview_plugin.dart';
@@ -35,7 +36,29 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     _controller = EasyRefreshController();
     _bannerFuture = _getBannerList();
    _getHomeList();
+   _autoLogin();
     super.initState();
+  }
+
+  void _autoLogin() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String username = prefs.getString("username");
+    String pwd = prefs.getString("password");
+    print('username$username pwd:$pwd');
+    if(null!=username&&null!=pwd){
+      _login(username, pwd);
+    }
+  }
+
+  void _login(String username,String pwd){
+    FormData formData = new FormData.fromMap({
+      "username": username,
+      "password": pwd,
+    });
+    requestPost(UrlPath['login'],formData: formData).then((val){
+      Provider.of<LoginProvider>(context).setHasLogin(true);
+      print('login success:>>>>>${val}');
+    });
   }
 
   @override

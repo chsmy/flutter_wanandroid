@@ -13,6 +13,7 @@ const UrlPath = {
   'project' : BaseUrl + 'project/tree/json',//项目列表
   'project_detail' : BaseUrl + 'project/list',//项目详情列表
   'navi' : BaseUrl + 'navi/json',//导航列表
+  'login' : BaseUrl + 'user/login',//登录
 };
 
 Future requestGet(url,{formData})async{
@@ -45,7 +46,7 @@ Future requestPost(url,{formData})async{
     }else{
       response = await dio.post(url,data:formData);
     }
-    print(response);
+    print('url>>$url formdata>>$formData');
     if(response.statusCode==200){
       return response;
     }else{
