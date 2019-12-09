@@ -68,6 +68,7 @@ class _LoginItemState extends State<LoginItem> {
     requestPost(UrlPath['login'],formData: formData).then((val){
           print('login:>>>>>${val}');
           Provider.of<LoginProvider>(context).setHasLogin(true);
+          Provider.of<LoginProvider>(context).setUserName(username);
           _saveUserInfo();
     });
   }

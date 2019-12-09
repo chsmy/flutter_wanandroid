@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_wanandroid/provider/login_provider.dart';
+import 'package:provider/provider.dart';
 //我的信息
 class MinePage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
+    String userName = Provider.of<LoginProvider>(context,listen: false).userName;
+    debugPrint("userName:$userName");
     return  Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -13,8 +17,8 @@ class MinePage extends StatelessWidget{
             currentAccountPicture: CircleAvatar(
               backgroundImage: NetworkImage("http://b-ssl.duitang.com/uploads/item/201712/22/20171222223729_d8HCB.jpeg"),
             ),
-            accountName: Text("CHS",style: TextStyle(color: Colors.black),),
-            accountEmail: Text("chs@163.com",style: TextStyle(color: Colors.black87),),
+            accountName: Text(userName??"CHS",style: TextStyle(color: Colors.black),),
+            accountEmail: Text("${userName??"chs"}@163.com",style: TextStyle(color: Colors.black87),),
             //设置头部背景
             decoration: BoxDecoration(
               color: Colors.blue[400],

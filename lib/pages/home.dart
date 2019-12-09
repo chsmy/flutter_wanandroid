@@ -57,6 +57,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     });
     requestPost(UrlPath['login'],formData: formData).then((val){
       Provider.of<LoginProvider>(context).setHasLogin(true);
+      Provider.of<LoginProvider>(context).setUserName(username);
       print('login success:>>>>>${val}');
     });
   }
@@ -126,11 +127,59 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   }
 }
 
-class HomeList extends StatelessWidget {
+class HomeList extends StatefulWidget {
 
   final List homeList;
   HomeList({Key key,this.homeList}):super(key:key);
-  
+
+  @override
+  _HomeListState createState() => _HomeListState(homeList);
+}
+
+class _HomeListState extends State<HomeList> with SingleTickerProviderStateMixin{
+   final List homeList;
+  _HomeListState(this.homeList);
+   AnimationController animationController;
+   Animation animationSize;
+   Animation animationColor;
+   CurvedAnimation curvedAnimation;
+
+   @override
+   void initState() {
+     super.initState();
+     animationController = AnimationController(
+         duration: Duration(milliseconds: 500),
+         vsync: this
+     );
+     //设置插值器  这里使用一个默认的插值器bounceInOut
+     curvedAnimation = CurvedAnimation(parent: animationController,curve: Curves.linear);
+     animationSize = Tween(begin: 16.0,end: 32.0).animate(curvedAnimation);
+     animationColor = ColorTween(begin: Colors.grey,end: Colors.red).animate(curvedAnimation);
+     animationController.addStatusListener((status){
+       debugPrint('status $status');
+       switch (status){
+       //动画一开始就停止了
+         case AnimationStatus.dismissed:
+           break;
+       //动画从头到尾都在播放
+         case AnimationStatus.forward:
+           break;
+       //动画从结束到开始倒着播放
+         case AnimationStatus.reverse:
+           break;
+       //动画播放完停止
+         case AnimationStatus.completed:
+           animationController.reverse();
+           break;
+       }
+     });
+   }
+   @override
+   void dispose() {
+     super.dispose();
+     animationController.dispose();
+   }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -175,17 +224,24 @@ class HomeList extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(homeList[index]['superChapterName']),
-                    InkWell(
-                      onTap: (){
-                        if(!Provider.of<LoginProvider>(context,listen: false).isAlreadyLogin){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) {
-                            return LoginPage();
-                          }));
-                        }else{
-
-                        }
+                    AnimatedBuilder(
+                      animation: animationController,
+                      builder: (context,child){
+                        return InkWell(
+                          onTap: (){
+                            if(!Provider.of<LoginProvider>(context,listen: false).isAlreadyLogin){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                return LoginPage();
+                              }));
+                            }else{
+                              debugPrint("AnimatedBuilder");
+                              animationController.forward();
+                            }
+                          },
+                          child: Icon(Icons.favorite_border,size: animationSize.value,color: animationColor.value,),
+                        );
                       },
-                      child: Icon(Icons.favorite_border,size: 16,),)
+                    ),
                   ],
                 ),
               ],
@@ -195,6 +251,8 @@ class HomeList extends StatelessWidget {
       ),
     );
   }
+
 }
+
 
 
